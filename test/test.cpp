@@ -4,6 +4,12 @@ extern "C" void main();
 #include <sysctl.h>
 #include <pin.h>
 #include <uart.h>
+#include <timer.h>
+
+void
+callback(void)
+{
+}
 
 void
 main()
@@ -16,6 +22,10 @@ main()
 
     // feed system clock out on P0_3 at 1:10 for checking purposes.
     Sysctl::enable_clkout(P0_3, Sysctl::CLKOUTSRC_MAINSYSCLK, 10);
+
+    // start a timer
+    SYSCTL_MRT.clock(true);
+    Timer0.configure(callback, 24000, true);
 
     // mess around with a GPIO
     P0_2.configure(Pin::Output) << Pin::PushPull;
