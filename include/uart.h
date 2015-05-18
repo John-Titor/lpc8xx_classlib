@@ -62,6 +62,12 @@ public:
         return *this;
     }
 
+    const UART & operator << (char c) const __attribute__((always_inline))
+    {
+        send(c);
+        return *this;
+    }
+
     const UART & operator << (const char *s) const __attribute__((always_inline))
     {
         while (*s != '\0') {
@@ -74,12 +80,15 @@ public:
     {
         for (int shift = 28; shift >= 0; shift -= 4) {
             unsigned n = (val >> shift) & 0xf;
+            uint8_t c;
             if (n < 10) {
-                send('0' + n);
+                c = '0' + n;
             } else {
-                send('A' + n - 10);
+                c = 'A' + n - 10;
             }
+            send(c);
         }
+        return *this;
     }
 
 private:
