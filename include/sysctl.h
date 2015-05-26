@@ -122,7 +122,6 @@ public:
     {
         if (enable) {
             LPC_SYSCON->SYSAHBCLKCTRL |= _clock_bit;
-            reset();
         } else {
             LPC_SYSCON->SYSAHBCLKCTRL &= ~_clock_bit;
         }

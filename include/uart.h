@@ -41,6 +41,7 @@ public:
     UART &configure(unsigned rate) __always_inline
     {
         _sysctl.clock(true);
+        _sysctl.reset();
 
         _base->CFG = 0;
         _base->CTRL = 0;
