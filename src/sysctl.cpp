@@ -31,12 +31,12 @@ void
 common_init()
 {
     LPC_SYSCON->SYSAHBCLKCTRL |=                // turn on some useful clocks
-        Sysctl::CLOCK_SWM |                     // pin matrix
+        Sysctl::CLOCK_SWM   |                   // pin matrix
         Sysctl::CLOCK_IOCON |                   // I/O configurator
         Sysctl::CLOCK_GPIO;                     // GPIO block
     
-    LPC_GPIO_PORT->DIR0 |= (1 << 10) | (1 << 11);   // default I2C pin states
-    LPC_GPIO_PORT->SET0 |= (1 << 10) | (1 << 11);   // ... to prevent them floating
+    LPC_GPIO_PORT->DIR0 |= (1U << 10) | (1U << 11); // default I2C pin states
+    LPC_GPIO_PORT->SET0 |= (1U << 10) | (1U << 11); // ... to prevent them floating
 
     LPC_FLASHCTRL->FLASHCFG &= ~(3);            // no flash waitstates required at this speed
 }
@@ -66,8 +66,8 @@ Sysctl::init_24MHz()
 
     LPC_SYSCON->PDRUNCFG |= SLPWAKE_SYSPLL_PD;  // power down the PLL to configure
     LPC_SYSCON->SYSPLLCTRL =                    // Configure for FCLKIN = 12MHz, FCLKOUT = 24MHz
-        (1 << 0) |                              // ... M
-        (2 << 5);                               // ... P
+        (1U << 0) |                             // ... M
+        (2U << 5);                              // ... P
     LPC_SYSCON->PDRUNCFG &= ~SLPWAKE_SYSPLL_PD; // power up the PLL
     while (~LPC_SYSCON->SYSPLLSTAT & 1) {}      // ... wait for PLL lock
 

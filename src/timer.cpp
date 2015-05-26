@@ -35,7 +35,7 @@ void MRT_IRQHandler()
     LPC_MRT->IRQ_FLAG = flags;      // and acknowledge
 
     for (auto source = 0; source < 4; source++) {
-        if (flags & (1 << source)) {
+        if (flags & (1U << source)) {
             if (Timer::_callbacks[0] != nullptr) {
                 Timer::_callbacks[0]();
             }

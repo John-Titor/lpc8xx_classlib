@@ -33,58 +33,58 @@
 class Sysctl
 {
 public:
-    enum Clock_t {
-        CLOCK_SYS = 0,      // System clock
-        CLOCK_ROM,          // ROM clock
-        CLOCK_RAM,          // RAM clock
-        CLOCK_FLASHREG,     // FLASH register interface clock
-        CLOCK_FLASH,        // FLASH array access clock
-        CLOCK_I2C0,         // I2C0 clock
-        CLOCK_GPIO,         // GPIO clock
-        CLOCK_SWM,          // Switch matrix clock
-        CLOCK_SCT,          // State configurable timer clock
-        CLOCK_WKT,          // Self wake-up timer clock
-        CLOCK_MRT,          // Multi-rate timer clock
-        CLOCK_SPI0,         // SPI0 clock
-        CLOCK_SPI1,         // SPI01 clock
-        CLOCK_CRC,          // CRC clock
-        CLOCK_UART0,        // UART0 clock
-        CLOCK_UART1,        // UART1 clock
-        CLOCK_UART2,        // UART2 clock
-        CLOCK_WWDT,         // Watchdog clock
-        CLOCK_IOCON,        // IOCON clock
-        CLOCK_ACOMP,        // Analog comparator clock
+    enum Clock_t : unsigned {
+        CLOCK_SYS           = (1U << 0),  // System clock
+        CLOCK_ROM           = (1U << 1),  // ROM clock
+        CLOCK_RAM           = (1U << 2),  // RAM clock
+        CLOCK_FLASHREG      = (1U << 3),  // FLASH register interface clock
+        CLOCK_FLASH         = (1U << 4),  // FLASH array access clock
+        CLOCK_I2C0          = (1U << 5),  // I2C0 clock
+        CLOCK_GPIO          = (1U << 6),  // GPIO clock
+        CLOCK_SWM           = (1U << 7),  // Switch matrix clock
+        CLOCK_SCT           = (1U << 8),  // State configurable timer clock
+        CLOCK_WKT           = (1U << 9),  // Self wake-up timer clock
+        CLOCK_MRT           = (1U << 10), // Multi-rate timer clock
+        CLOCK_SPI0          = (1U << 11), // SPI0 clock
+        CLOCK_SPI1          = (1U << 12), // SPI01 clock
+        CLOCK_CRC           = (1U << 13), // CRC clock
+        CLOCK_UART0         = (1U << 14), // UART0 clock
+        CLOCK_UART1         = (1U << 15), // UART1 clock
+        CLOCK_UART2         = (1U << 16), // UART2 clock
+        CLOCK_WWDT          = (1U << 17), // Watchdog clock
+        CLOCK_IOCON         = (1U << 18), // IOCON clock
+        CLOCK_ACOMP         = (1U << 19), // Analog comparator clock
 
-        CLOCK_NONE
+        CLOCK_NONE          = 0
     };
 
-    enum Reset_t {
-        RESET_SPI0,         // SPI0 reset control
-        RESET_SPI1,         // SPI1 reset control
-        RESET_UARTFBRG,     // UART fractional baud rate generator reset control
-        RESET_UART0,        // UART0 reset control
-        RESET_UART1,        // UART1 reset control
-        RESET_UART2,        // UART2 reset control
-        RESET_I2C0,         // I2C0 reset control
-        RESET_MRT,          // MRT reset control
-        RESET_SCT,          // SCT reset control
-        RESET_WKT,          // Self wake-up timer (WKT) control
-        RESET_GPIO,         // GPIO reset control
-        RESET_FLASH,        // FLASH reset control
-        RESET_ACMP,         // ACMP reset control
+    enum Reset_t : unsigned {
+        RESET_SPI0          = (1U << 0),  // SPI0 reset control
+        RESET_SPI1          = (1U << 1),  // SPI1 reset control
+        RESET_UARTFBRG      = (1U << 2),  // UART fractional baud rate generator reset control
+        RESET_UART0         = (1U << 3),  // UART0 reset control
+        RESET_UART1         = (1U << 4),  // UART1 reset control
+        RESET_UART2         = (1U << 5),  // UART2 reset control
+        RESET_I2C0          = (1U << 6),  // I2C0 reset control
+        RESET_MRT           = (1U << 7),  // MRT reset control
+        RESET_SCT           = (1U << 8),  // SCT reset control
+        RESET_WKT           = (1U << 9),  // Self wake-up timer (WKT) control
+        RESET_GPIO          = (1U << 10), // GPIO reset control
+        RESET_FLASH         = (1U << 11), // FLASH reset control
+        RESET_ACMP          = (1U << 12), // ACMP reset control
 
-        RESET_NONE
+        RESET_NONE          = 0
     };
 
     enum PowerDown_t {
-        SLPWAKE_IRCOUT_PD = (1 << 0),   // IRC oscillator output wake-up configuration
-        SLPWAKE_IRC_PD    = (1 << 1),   // IRC oscillator power-down wake-up configuration
-        SLPWAKE_FLASH_PD  = (1 << 2),   // Flash wake-up configuration
-        SLPWAKE_BOD_PD    = (1 << 3),   // BOD wake-up configuration
-        SLPWAKE_SYSOSC_PD = (1 << 5),   // System oscillator wake-up configuration
-        SLPWAKE_WDTOSC_PD = (1 << 6),   // Watchdog oscillator wake-up configuration
-        SLPWAKE_SYSPLL_PD = (1 << 7),   // System PLL wake-up configuration
-        SLPWAKE_ACMP_PD   = (1 << 15)   // Analog comparator wake-up configuration
+        SLPWAKE_IRCOUT_PD   = (1U << 0),   // IRC oscillator output wake-up configuration
+        SLPWAKE_IRC_PD      = (1U << 1),   // IRC oscillator power-down wake-up configuration
+        SLPWAKE_FLASH_PD    = (1U << 2),   // Flash wake-up configuration
+        SLPWAKE_BOD_PD      = (1U << 3),   // BOD wake-up configuration
+        SLPWAKE_SYSOSC_PD   = (1U << 5),   // System oscillator wake-up configuration
+        SLPWAKE_WDTOSC_PD   = (1U << 6),   // Watchdog oscillator wake-up configuration
+        SLPWAKE_SYSPLL_PD   = (1U << 7),   // System PLL wake-up configuration
+        SLPWAKE_ACMP_PD     = (1U << 15)   // Analog comparator wake-up configuration
     };
 
     enum PLLClockSource_t {
@@ -108,8 +108,8 @@ public:
     };
 
     constexpr Sysctl(uint32_t clock, uint32_t reset) :
-        _clock_bit((clock < CLOCK_NONE) ? (1 << clock) : 0),
-        _reset_bit((reset < RESET_NONE) ? (1 << reset) : 0)
+        _clock_bit(clock),
+        _reset_bit(reset)
     {}
 
     void reset() const __always_inline

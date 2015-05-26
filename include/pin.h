@@ -38,24 +38,24 @@ public:
     };
 
     enum Modifier_t : uint32_t {
-        NoPull      = (0 << 3),
-        PullDown    = (1 << 3),
-        PullUp      = (2 << 3),
-        Hysteresis  = (1 << 5),
-        Invert      = (1 << 6),
-        PushPull    = (0 << 10),
-        OpenDrain   = (1 << 10),
-        Filter_0    = (0 << 11),
-        Filter_1    = (1 << 11),
-        Filter_2    = (2 << 11),
-        Filter_3    = (3 << 11),
-        ClkDiv_0    = (0 << 13),
-        ClkDiv_1    = (1 << 13),
-        ClkDiv_2    = (2 << 13),
-        ClkDiv_3    = (3 << 13),
-        ClkDiv_4    = (4 << 13),
-        ClkDiv_5    = (5 << 13),
-        ClkDiv_6    = (6 << 13),
+        NoPull      = (0U << 3),
+        PullDown    = (1U << 3),
+        PullUp      = (2U << 3),
+        Hysteresis  = (1U << 5),
+        Invert      = (1U << 6),
+        PushPull    = (0U << 10),
+        OpenDrain   = (1U << 10),
+        Filter_0    = (0U << 11),
+        Filter_1    = (1U << 11),
+        Filter_2    = (2U << 11),
+        Filter_3    = (3U << 11),
+        ClkDiv_0    = (0U << 13),
+        ClkDiv_1    = (1U << 13),
+        ClkDiv_2    = (2U << 13),
+        ClkDiv_3    = (3U << 13),
+        ClkDiv_4    = (4U << 13),
+        ClkDiv_5    = (5U << 13),
+        ClkDiv_6    = (6U << 13),
     };
 
 private:
@@ -66,7 +66,7 @@ private:
 public:
     constexpr Pin(unsigned pin_number, __IO uint32_t *iocon_reg) : 
         _pin_number(pin_number),
-        _pin_mask(1 << pin_number),
+        _pin_mask(1U << pin_number),
         _iocon_reg(iocon_reg)
     {}
 
@@ -89,7 +89,7 @@ public:
         } else {
             LPC_GPIO_PORT->DIR0 &= ~_pin_mask;
         }
-        *_iocon_reg = modifier | (1 << 7);
+        *_iocon_reg = modifier | (1U << 7);
         return *this;
     }
 
@@ -107,24 +107,24 @@ public:
 
 };
 
-#define PIO0_0  Pin(0, &LPC_IOCON->PIO0_0)
-#define PIO0_1  Pin(1, &LPC_IOCON->PIO0_1)
-#define PIO0_2  Pin(2, &LPC_IOCON->PIO0_2)
-#define PIO0_3  Pin(3, &LPC_IOCON->PIO0_3)
-#define PIO0_4  Pin(4, &LPC_IOCON->PIO0_4)
-#define PIO0_5  Pin(5, &LPC_IOCON->PIO0_5)
-#define PIO0_6  Pin(6, &LPC_IOCON->PIO0_6)
-#define PIO0_7  Pin(7, &LPC_IOCON->PIO0_7)
-#define PIO0_8  Pin(8, &LPC_IOCON->PIO0_8)
-#define PIO0_9  Pin(9, &LPC_IOCON->PIO0_9)
-#define PIO0_10 Pin(10, &LPC_IOCON->PIO0_10)
-#define PIO0_11 Pin(11, &LPC_IOCON->PIO0_11)
-#define PIO0_12 Pin(12, &LPC_IOCON->PIO0_12)
-#define PIO0_13 Pin(13, &LPC_IOCON->PIO0_13)
-#define PIO0_14 Pin(14, &LPC_IOCON->PIO0_14)
-#define PIO0_15 Pin(15, &LPC_IOCON->PIO0_15)
-#define PIO0_16 Pin(16, &LPC_IOCON->PIO0_16)
-#define PIO0_17 Pin(17, &LPC_IOCON->PIO0_17)
+#define P0_0    Pin(0, &LPC_IOCON->PIO0_0)
+#define P0_1    Pin(1, &LPC_IOCON->PIO0_1)
+#define P0_2    Pin(2, &LPC_IOCON->PIO0_2)
+#define P0_3    Pin(3, &LPC_IOCON->PIO0_3)
+#define P0_4    Pin(4, &LPC_IOCON->PIO0_4)
+#define P0_5    Pin(5, &LPC_IOCON->PIO0_5)
+#define P0_6    Pin(6, &LPC_IOCON->PIO0_6)
+#define P0_7    Pin(7, &LPC_IOCON->PIO0_7)
+#define P0_8    Pin(8, &LPC_IOCON->PIO0_8)
+#define P0_9    Pin(9, &LPC_IOCON->PIO0_9)
+#define P0_10   Pin(10, &LPC_IOCON->PIO0_10)
+#define P0_11   Pin(11, &LPC_IOCON->PIO0_11)
+#define P0_12   Pin(12, &LPC_IOCON->PIO0_12)
+#define P0_13   Pin(13, &LPC_IOCON->PIO0_13)
+#define P0_14   Pin(14, &LPC_IOCON->PIO0_14)
+#define P0_15   Pin(15, &LPC_IOCON->PIO0_15)
+#define P0_16   Pin(16, &LPC_IOCON->PIO0_16)
+#define P0_17   Pin(17, &LPC_IOCON->PIO0_17)
 
 class MovableFunction
 {
@@ -197,8 +197,8 @@ public:
         _function_number(function_number)
     {}
 
-    void enable() const __always_inline { LPC_SWM->PINENABLE0 &= ~(1 << _function_number); }
-    void disable() const __always_inline { LPC_SWM->PINENABLE0 |= (1 << _function_number); }
+    void enable() const __always_inline { LPC_SWM->PINENABLE0 &= ~(1U << _function_number); }
+    void disable() const __always_inline { LPC_SWM->PINENABLE0 |= (1U << _function_number); }
 
 private:
     const unsigned  _function_number;

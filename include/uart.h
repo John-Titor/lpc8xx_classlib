@@ -99,45 +99,45 @@ private:
     const Sysctl        &_sysctl;
 
     enum Cfg_t {
-        CFG_ENABLE      = (1 << 0),     // enable the UART
-        CFG_DATALEN_7   = (0 << 2),     // UART 7 bit length mode
-        CFG_DATALEN_8   = (1 << 2),     // UART 8 bit length mode
-        CFG_DATALEN_9   = (2 << 2),     // UART 9 bit length mode
-        CFG_PARITY_NONE = (0 << 4),     // No parity
-        CFG_PARITY_EVEN = (2 << 4),     // Even parity
-        CFG_PARITY_ODD  = (3 << 4),     // Odd parity
-        CFG_STOPLEN_1   = (0 << 6),     // UART One Stop Bit Select
-        CFG_STOPLEN_2   = (1 << 6),     // UART Two Stop Bits Select
-        CFG_CTSEN       = (1 << 9),     // CTS enable bit
-        CFG_SYNCEN      = (1 << 11),    // Synchronous mode enable bit
-        CFG_CLKPOL      = (1 << 12),    // Un_RXD rising edge sample enable bit
-        CFG_SYNCMST     = (1 << 14),    // Select master mode (synchronous mode) enable bit
-        CFG_LOOP        = (1 << 15)     // Loopback mode enable bit
+        CFG_ENABLE      = (1U << 0),    // enable the UART
+        CFG_DATALEN_7   = (0U << 2),    // UART 7 bit length mode
+        CFG_DATALEN_8   = (1U << 2),    // UART 8 bit length mode
+        CFG_DATALEN_9   = (2U << 2),    // UART 9 bit length mode
+        CFG_PARITY_NONE = (0U << 4),    // No parity
+        CFG_PARITY_EVEN = (2U << 4),    // Even parity
+        CFG_PARITY_ODD  = (3U << 4),    // Odd parity
+        CFG_STOPLEN_1   = (0U << 6),    // UART One Stop Bit Select
+        CFG_STOPLEN_2   = (1U << 6),    // UART Two Stop Bits Select
+        CFG_CTSEN       = (1U << 9),    // CTS enable bit
+        CFG_SYNCEN      = (1U << 11),   // Synchronous mode enable bit
+        CFG_CLKPOL      = (1U << 12),   // Un_RXD rising edge sample enable bit
+        CFG_SYNCMST     = (1U << 14),   // Select master mode (synchronous mode) enable bit
+        CFG_LOOP        = (1U << 15)    // Loopback mode enable bit
     };
 
     enum Ctrl_t {
-        CTRL_TXBRKEN    = (1 << 1),     // Continuous break enable bit
-        CTRL_ADDRDET    = (1 << 2),     // Address detect mode enable bit
-        CTRL_TXDIS      = (1 << 6),     // Transmit disable bit
-        CTRL_CC         = (1 << 8),     // Continuous Clock mode enable bit
-        CTRL_CLRCC      = (1 << 9)      // Clear Continuous Clock bit
+        CTRL_TXBRKEN    = (1U << 1),    // Continuous break enable bit
+        CTRL_ADDRDET    = (1U << 2),    // Address detect mode enable bit
+        CTRL_TXDIS      = (1U << 6),    // Transmit disable bit
+        CTRL_CC         = (1U << 8),    // Continuous Clock mode enable bit
+        CTRL_CLRCC      = (1U << 9)     // Clear Continuous Clock bit
     };
 
     enum Stat_t {
-        STAT_RXRDY      = (1 << 0),     // Receiver ready
-        STAT_RXIDLE     = (1 << 1),     // Receiver idle
-        STAT_TXRDY      = (1 << 2),     // Transmitter ready for data
-        STAT_TXIDLE     = (1 << 3),     // Transmitter idle
-        STAT_CTS        = (1 << 4),     // Status of CTS signal
-        STAT_DELTACTS   = (1 << 5),     // Change in CTS state
-        STAT_TXDISINT   = (1 << 6),     // Transmitter disabled
-        STAT_OVERRUNINT = (1 << 8),     // Overrun Error interrupt flag.
-        STAT_RXBRK      = (1 << 10),    // Received break
-        STAT_DELTARXBRK = (1 << 11),    // Change in receive break detection
-        STAT_START      = (1 << 12),    // Start detected
-        STAT_FRM_ERRINT = (1 << 13),    // Framing Error interrupt flag
-        STAT_PAR_ERRINT = (1 << 14),    // Parity Error interrupt flag
-        STAT_RXNOISEINT = (1 << 15)     // Received Noise interrupt flag
+        STAT_RXRDY      = (1U << 0),    // Receiver ready
+        STAT_RXIDLE     = (1U << 1),    // Receiver idle
+        STAT_TXRDY      = (1U << 2),    // Transmitter ready for data
+        STAT_TXIDLE     = (1U << 3),    // Transmitter idle
+        STAT_CTS        = (1U << 4),    // Status of CTS signal
+        STAT_DELTACTS   = (1U << 5),    // Change in CTS state
+        STAT_TXDISINT   = (1U << 6),    // Transmitter disabled
+        STAT_OVERRUNINT = (1U << 8),    // Overrun Error interrupt flag.
+        STAT_RXBRK      = (1U << 10),   // Received break
+        STAT_DELTARXBRK = (1U << 11),   // Change in receive break detection
+        STAT_START      = (1U << 12),   // Start detected
+        STAT_FRM_ERRINT = (1U << 13),   // Framing Error interrupt flag
+        STAT_PAR_ERRINT = (1U << 14),   // Parity Error interrupt flag
+        STAT_RXNOISEINT = (1U << 15)    // Received Noise interrupt flag
     };
 };
 
