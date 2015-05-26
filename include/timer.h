@@ -28,6 +28,7 @@
 
 #include <LPC8xx.h>
 #include "_compiler.h"
+#include "sysctl.h"
 
 extern "C" void MRT_IRQHandler();
 
@@ -48,6 +49,7 @@ public:
 
     void configure(Callback callback, unsigned period, bool repeat) const __always_inline
     {
+        SYSCTL_MRT.clock(true);             // we want timers
         *_intval = 0x80000000;              // stop the timer
         *_ctrl = repeat ? 0x01 : 0x03;      // pick one-shot or repeat, interrupt enabled
         _callbacks[_index] = callback;      // save the callback

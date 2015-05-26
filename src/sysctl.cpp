@@ -30,6 +30,8 @@ namespace {
 void
 common_init()
 {
+    LPC_FLASHCTRL->FLASHCFG &= ~(3);            // no flash waitstates required up to 30MHz
+
     LPC_SYSCON->SYSAHBCLKCTRL |=                // turn on some useful clocks
         Sysctl::CLOCK_SWM   |                   // pin matrix
         Sysctl::CLOCK_IOCON |                   // I/O configurator
@@ -38,7 +40,10 @@ common_init()
     LPC_GPIO_PORT->DIR0 |= (1U << 10) | (1U << 11); // default I2C pin states
     LPC_GPIO_PORT->SET0 |= (1U << 10) | (1U << 11); // ... to prevent them floating
 
-    LPC_FLASHCTRL->FLASHCFG &= ~(3);            // no flash waitstates required at this speed
+    LPC_SWM->PINENABLE0 |=                      // disable annoying fixed pin functions
+        (1U << 2) |                             // ... SWCLK
+        (1U << 3) |                             // ... SWDIO
+        (1U << 6);                              // ... RST
 }
 } // namespace
 
