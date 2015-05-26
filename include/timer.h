@@ -51,7 +51,8 @@ public:
     {
         SYSCTL_MRT.clock(true);             // we want timers
         *_intval = 0x80000000;              // stop the timer
-        *_ctrl = repeat ? 0x01 : 0x03;      // pick one-shot or repeat, interrupt enabled
+        *_ctrl = (repeat ? 0 : (1U << 1)) |             // one-shot or repeat
+            ((callback == nullptr) ? 0 : (1U << 0));    // with or without interrupt
         _callbacks[_index] = callback;      // save the callback
         *_intval = period | 0x80000000;     // immediate load of new value & start
     }
@@ -62,7 +63,18 @@ public:
     }
 
     void                cancel() { configure (nullptr, 0, false); }
-    bool                expired() const { return *_timer == 0; }
+
+    bool                expired() const 
+    {
+        uint32_t stat = LPC_MRT->IRQ_FLAG;
+        uint32_t mask = (1U << _index);
+
+        if (stat & mask) {
+            LPC_MRT->IRQ_FLAG = mask;
+            return true;
+        }
+        return false;
+    }
 
 private:
     const unsigned      _index;
