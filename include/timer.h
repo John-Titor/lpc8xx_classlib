@@ -36,9 +36,13 @@ class Timer
 public:
     typedef void        (* Callback)();
 
-    constexpr Timer(unsigned index, __IO uint32_t *intval, __IO uint32_t *ctrl) :
+    constexpr Timer(unsigned index,
+            __IO uint32_t *intval,
+            __IO uint32_t *timer,
+            __IO uint32_t *ctrl) :
         _index(index),
         _intval(intval),
+        _timer(timer),
         _ctrl(ctrl)
     {}
 
@@ -50,11 +54,18 @@ public:
         *_intval = period | 0x80000000;     // immediate load of new value & start
     }
 
+    void configure(unsigned period, bool repeat = false) const __always_inline
+    {
+        configure(nullptr, period, repeat);
+    }
+
     void                cancel() { configure (nullptr, 0, false); }
+    bool                expired() const { return *_timer == 0; }
 
 private:
     const unsigned      _index;
     __IO uint32_t       * const _intval;
+    __IO uint32_t       * const _timer;
     __IO uint32_t       * const _ctrl;
 
     static Callback     _callbacks[4];
@@ -62,7 +73,7 @@ private:
     friend void ::MRT_IRQHandler();
 };
 
-#define Timer0  Timer(0, &LPC_MRT->INTVAL0, &LPC_MRT->CTRL0)
-#define Timer1  Timer(1, &LPC_MRT->INTVAL1, &LPC_MRT->CTRL1)
-#define Timer2  Timer(2, &LPC_MRT->INTVAL2, &LPC_MRT->CTRL2)
-#define Timer3  Timer(3, &LPC_MRT->INTVAL3, &LPC_MRT->CTRL3)
+#define Timer0  Timer(0, &LPC_MRT->INTVAL0, &LPC_MRT->TIMER0, &LPC_MRT->CTRL0)
+#define Timer1  Timer(1, &LPC_MRT->INTVAL1, &LPC_MRT->TIMER1, &LPC_MRT->CTRL1)
+#define Timer2  Timer(2, &LPC_MRT->INTVAL2, &LPC_MRT->TIMER2, &LPC_MRT->CTRL2)
+#define Timer3  Timer(3, &LPC_MRT->INTVAL3, &LPC_MRT->TIMER3, &LPC_MRT->CTRL3)
