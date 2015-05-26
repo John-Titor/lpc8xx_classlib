@@ -27,6 +27,7 @@
 #pragma once
 
 #include <LPC8xx.h>
+#include "_compiler.h"
 #include "sysctl.h"
 
 class UART
@@ -37,7 +38,7 @@ public:
         _sysctl(sysctl)
     {}
 
-    void configure(unsigned rate) __attribute__((always_inline))
+    UART &configure(unsigned rate) __always_inline
     {
         _sysctl.clock(true);
 
@@ -49,26 +50,26 @@ public:
         _base->CFG |= CFG_ENABLE;
     }
 
-    void send(uint8_t c) const __attribute__((always_inline))
+    void send(uint8_t c) const __always_inline
     {
         while ((_base->STAT & STAT_TXRDY) == 0) {}
 
         _base->TXDATA = c;
     }
 
-    const UART & operator << (uint8_t c) const __attribute__((always_inline))
+    const UART & operator << (uint8_t c) const __always_inline
     {
         send(c);
         return *this;
     }
 
-    const UART & operator << (char c) const __attribute__((always_inline))
+    const UART & operator << (char c) const __always_inline
     {
         send(c);
         return *this;
     }
 
-    const UART & operator << (const char *s) const __attribute__((always_inline))
+    const UART & operator << (const char *s) const __always_inline
     {
         while (*s != '\0') {
             send(*s++);

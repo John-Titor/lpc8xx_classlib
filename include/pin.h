@@ -27,6 +27,7 @@
 #pragma once
 
 #include <LPC8xx.h>
+#include "_compiler.h"
 
 class Pin
 {
@@ -69,14 +70,14 @@ public:
         _iocon_reg(iocon_reg)
     {}
 
-    unsigned    number() const __attribute__((always_inline)) { return _pin_number; }
-    bool        get()    const __attribute__((always_inline)) { return LPC_GPIO_PORT->PIN0 & _pin_mask; }
-    operator    bool()   const __attribute__((always_inline)) { return get(); }
-    void        clear()  const __attribute__((always_inline)) { LPC_GPIO_PORT->CLR0 = _pin_mask; }
-    void        set()    const __attribute__((always_inline)) { LPC_GPIO_PORT->SET0 = _pin_mask; }
-    void        toggle() const __attribute__((always_inline)) { LPC_GPIO_PORT->NOT0 = _pin_mask; }
+    unsigned    number() const __always_inline { return _pin_number; }
+    bool        get()    const __always_inline { return LPC_GPIO_PORT->PIN0 & _pin_mask; }
+    operator    bool()   const __always_inline { return get(); }
+    void        clear()  const __always_inline { LPC_GPIO_PORT->CLR0 = _pin_mask; }
+    void        set()    const __always_inline { LPC_GPIO_PORT->SET0 = _pin_mask; }
+    void        toggle() const __always_inline { LPC_GPIO_PORT->NOT0 = _pin_mask; }
 
-    void set(bool value) const __attribute__((always_inline)) 
+    void set(bool value) const __always_inline
     {
         (value ? LPC_GPIO_PORT->SET0 : LPC_GPIO_PORT->CLR0) = _pin_mask; 
     }
@@ -131,7 +132,7 @@ public:
         _function_number(function_number)
     {}
 
-    void claim_pin(const Pin &pin)
+    void claim_pin(const Pin &pin) const __always_inline
     {
         __IO uint32_t *reg = &LPC_SWM->PINASSIGN0 + (_function_number >> 4);
         unsigned shift = (_function_number & 0xf) * 8;
@@ -139,7 +140,8 @@ public:
         *reg = (*reg & ~(0xff << shift)) | (pin.number() << shift);
     }
 
-    void release_pin() {
+    void release_pin() const __always_inline
+    {
         __IO uint32_t *reg = &LPC_SWM->PINASSIGN0 + (_function_number >> 4);
         unsigned shift = (_function_number & 0xf) * 8;
 
@@ -194,8 +196,8 @@ public:
         _function_number(function_number)
     {}
 
-    void enable()   { LPC_SWM->PINENABLE0 &= ~(1 << _function_number); }
-    void disable () { LPC_SWM->PINENABLE0 |= (1 << _function_number); }
+    void enable() const __always_inline { LPC_SWM->PINENABLE0 &= ~(1 << _function_number); }
+    void disable() const __always_inline { LPC_SWM->PINENABLE0 |= (1 << _function_number); }
 
 private:
     const unsigned  _function_number;

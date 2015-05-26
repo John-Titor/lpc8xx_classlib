@@ -112,13 +112,13 @@ public:
         _reset_bit((reset < RESET_NONE) ? (1 << reset) : 0)
     {}
 
-    void reset() const __attribute__((always_inline))
+    void reset() const __always_inline
     {
         LPC_SYSCON->PRESETCTRL &= ~_reset_bit;
         LPC_SYSCON->PRESETCTRL |= _reset_bit;
     }
 
-    void clock(bool enable) const __attribute__((always_inline))
+    void clock(bool enable) const __always_inline
     {
         if (enable) {
             LPC_SYSCON->SYSAHBCLKCTRL |= _clock_bit;

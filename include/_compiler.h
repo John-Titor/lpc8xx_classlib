@@ -26,43 +26,4 @@
 
 #pragma once
 
-#include <LPC8xx.h>
-#include "_compiler.h"
-
-extern "C" void MRT_IRQHandler();
-
-class Timer
-{
-public:
-    typedef void        (* Callback)();
-
-    constexpr Timer(unsigned index, __IO uint32_t *intval, __IO uint32_t *ctrl) :
-        _index(index),
-        _intval(intval),
-        _ctrl(ctrl)
-    {}
-
-    void configure(Callback callback, unsigned period, bool repeat) const __always_inline
-    {
-        *_intval = 0x80000000;              // stop the timer
-        *_ctrl = repeat ? 0x01 : 0x03;      // pick one-shot or repeat, interrupt enabled
-        _callbacks[_index] = callback;      // save the callback
-        *_intval = period | 0x80000000;     // immediate load of new value & start
-    }
-
-    void                cancel() { configure (nullptr, 0, false); }
-
-private:
-    const unsigned      _index;
-    __IO uint32_t       * const _intval;
-    __IO uint32_t       * const _ctrl;
-
-    static Callback     _callbacks[4];
-
-    friend void ::MRT_IRQHandler();
-};
-
-#define Timer0  Timer(0, &LPC_MRT->INTVAL0, &LPC_MRT->CTRL0)
-#define Timer1  Timer(1, &LPC_MRT->INTVAL1, &LPC_MRT->CTRL1)
-#define Timer2  Timer(2, &LPC_MRT->INTVAL2, &LPC_MRT->CTRL2)
-#define Timer3  Timer(3, &LPC_MRT->INTVAL3, &LPC_MRT->CTRL3)
+#define __always_inline     __attribute__((always_inline))
