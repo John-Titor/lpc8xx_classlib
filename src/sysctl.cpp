@@ -26,20 +26,31 @@
 
 #include "sysctl.h"
 
+namespace {
+void
+common_init()
+{
+    LPC_SYSCON->SYSAHBCLKCTRL |=                // turn on some useful clocks
+        Sysctl::CLOCK_SWM |                     // pin matrix
+        Sysctl::CLOCK_IOCON |                   // I/O configurator
+        Sysctl::CLOCK_GPIO;                     // GPIO block
+    
+    LPC_GPIO_PORT->DIR0 |= (1 << 10) | (1 << 11);   // default I2C pin states
+    LPC_GPIO_PORT->SET0 |= (1 << 10) | (1 << 11);   // ... to prevent them floating
+
+    LPC_FLASHCTRL->FLASHCFG &= ~(3);            // no flash waitstates required at this speed
+}
+} // namespace
+
 void
 Sysctl::init_12MHz()
 {
-    LPC_SYSCON->SYSAHBCLKCTRL |=                // turn on some useful clocks
-        CLOCK_SWM |
-        CLOCK_IOCON |
-        CLOCK_GPIO;
+    common_init();
 
     LPC_SYSCON->SYSAHBCLKDIV = 1;               // run fabric at /1
     LPC_SYSCON->MAINCLKSEL = 0;                 // ... using the IRC
     LPC_SYSCON->MAINCLKUEN = 0;                 // latch the new clock source
     LPC_SYSCON->MAINCLKUEN = 1;
-
-    LPC_FLASHCTRL->FLASHCFG &= ~(3);            // no flash waitstates required at this speed
 
     set_uart_prescale(6, 21);                   // UART base clock = 115200 * 16
 }
@@ -47,10 +58,7 @@ Sysctl::init_12MHz()
 void
 Sysctl::init_24MHz()
 {
-    LPC_SYSCON->SYSAHBCLKCTRL |=                // turn on some useful clocks
-        CLOCK_SWM |
-        CLOCK_IOCON |
-        CLOCK_GPIO;
+    common_init();
 
     LPC_SYSCON->SYSPLLCLKSEL = PLLCLKSRC_IRC;   // select the IRC as the PLL input
     LPC_SYSCON->SYSPLLCLKUEN = 0;               // latch the new PLL source
@@ -67,8 +75,6 @@ Sysctl::init_24MHz()
     LPC_SYSCON->MAINCLKSEL = MAINCLKSRC_PLLOUT; // ... using the PLL
     LPC_SYSCON->MAINCLKUEN = 0;                 // latch the new clock source
     LPC_SYSCON->MAINCLKUEN = 1;
-
-    LPC_FLASHCTRL->FLASHCFG &= ~(3);            // no flash waitstates required at this speed
 
     set_uart_prescale(13, 0);                   // UART base clock = 115200 * 16
 }
