@@ -37,7 +37,7 @@ public:
         Output
     };
 
-    enum Modifier_t {
+    enum Modifier_t : uint32_t {
         NoPull      = (0 << 3),
         PullDown    = (1 << 3),
         PullUp      = (2 << 3),
@@ -82,48 +82,49 @@ public:
         (value ? LPC_GPIO_PORT->SET0 : LPC_GPIO_PORT->CLR0) = _pin_mask; 
     }
 
-    Pin & configure(Direction_t direction) __attribute__((always_inline))
+    Pin & configure(Direction_t direction, uint32_t modifier = 0) __always_inline
     {
-        if (direction) {
+        if (direction == Output) {
             LPC_GPIO_PORT->DIR0 |= _pin_mask;
         } else {
             LPC_GPIO_PORT->DIR0 &= ~_pin_mask;
         }
+        *_iocon_reg = modifier | (1 << 7);
         return *this;
     }
 
-    const Pin & operator << (Modifier_t modifier) const __attribute__((always_inline))
-    {
-        *_iocon_reg |= (unsigned)modifier;
-        return *this;
-    }
-
-    const Pin & operator << (int i) const __attribute__((always_inline)) 
+    const Pin & operator << (int i) const __always_inline
     {
         set(i);
         return * this;
     }
 
+    const Pin & operator=(const Pin &from) const __always_inline
+    {
+        set(from.get());
+        return *this;
+    }
+
 };
 
-#define P0_0    Pin(0, &LPC_IOCON->PIO0_0)
-#define P0_1    Pin(1, &LPC_IOCON->PIO0_1)
-#define P0_2    Pin(2, &LPC_IOCON->PIO0_2)
-#define P0_3    Pin(3, &LPC_IOCON->PIO0_3)
-#define P0_4    Pin(4, &LPC_IOCON->PIO0_4)
-#define P0_5    Pin(5, &LPC_IOCON->PIO0_5)
-#define P0_6    Pin(6, &LPC_IOCON->PIO0_6)
-#define P0_7    Pin(7, &LPC_IOCON->PIO0_7)
-#define P0_8    Pin(8, &LPC_IOCON->PIO0_8)
-#define P0_9    Pin(9, &LPC_IOCON->PIO0_9)
-#define P0_10   Pin(10, &LPC_IOCON->PIO0_10)
-#define P0_11   Pin(11, &LPC_IOCON->PIO0_11)
-#define P0_12   Pin(12, &LPC_IOCON->PIO0_12)
-#define P0_13   Pin(13, &LPC_IOCON->PIO0_13)
-#define P0_14   Pin(14, &LPC_IOCON->PIO0_14)
-#define P0_15   Pin(15, &LPC_IOCON->PIO0_15)
-#define P0_16   Pin(16, &LPC_IOCON->PIO0_16)
-#define P0_17   Pin(17, &LPC_IOCON->PIO0_17)
+#define PIO0_0  Pin(0, &LPC_IOCON->PIO0_0)
+#define PIO0_1  Pin(1, &LPC_IOCON->PIO0_1)
+#define PIO0_2  Pin(2, &LPC_IOCON->PIO0_2)
+#define PIO0_3  Pin(3, &LPC_IOCON->PIO0_3)
+#define PIO0_4  Pin(4, &LPC_IOCON->PIO0_4)
+#define PIO0_5  Pin(5, &LPC_IOCON->PIO0_5)
+#define PIO0_6  Pin(6, &LPC_IOCON->PIO0_6)
+#define PIO0_7  Pin(7, &LPC_IOCON->PIO0_7)
+#define PIO0_8  Pin(8, &LPC_IOCON->PIO0_8)
+#define PIO0_9  Pin(9, &LPC_IOCON->PIO0_9)
+#define PIO0_10 Pin(10, &LPC_IOCON->PIO0_10)
+#define PIO0_11 Pin(11, &LPC_IOCON->PIO0_11)
+#define PIO0_12 Pin(12, &LPC_IOCON->PIO0_12)
+#define PIO0_13 Pin(13, &LPC_IOCON->PIO0_13)
+#define PIO0_14 Pin(14, &LPC_IOCON->PIO0_14)
+#define PIO0_15 Pin(15, &LPC_IOCON->PIO0_15)
+#define PIO0_16 Pin(16, &LPC_IOCON->PIO0_16)
+#define PIO0_17 Pin(17, &LPC_IOCON->PIO0_17)
 
 class MovableFunction
 {
@@ -152,21 +153,21 @@ private:
     const unsigned  _function_number;
 };
 
-#define U0_TXD          MovableFunction(0x00) // UART0 TXD Output
-#define U0_RXD          MovableFunction(0x01) // UART0 RXD Input
-#define U0_RTS          MovableFunction(0x02) // UART0 RTS Output
-#define U0_CTS          MovableFunction(0x03) // UART0 CTS Input
-#define U0_SCLK         MovableFunction(0x10) // UART0 SCLK I/O
-#define U1_TXD          MovableFunction(0x11) // UART1 TXD Output
-#define U1_RXD          MovableFunction(0x12) // UART1 RXD Input
-#define U1_RTS          MovableFunction(0x13) // UART1 RTS Output
-#define U1_CTS          MovableFunction(0x20) // UART1 CTS Input
-#define U1_SCLK         MovableFunction(0x21) // UART1 SCLK I/O
-#define U2_TXD          MovableFunction(0x22) // UART2 TXD Output
-#define U2_RXD          MovableFunction(0x23) // UART2 RXD Input
-#define U2_RTS          MovableFunction(0x30) // UART2 RTS Output
-#define U2_CTS          MovableFunction(0x31) // UART2 CTS Input
-#define U2_SCLK         MovableFunction(0x32) // UART2 SCLK I/O
+#define UART0_TXD       MovableFunction(0x00) // UART0 TXD Output
+#define UART0_RXD       MovableFunction(0x01) // UART0 RXD Input
+#define UART0_RTS       MovableFunction(0x02) // UART0 RTS Output
+#define UART0_CTS       MovableFunction(0x03) // UART0 CTS Input
+#define UART0_SCLK      MovableFunction(0x10) // UART0 SCLK I/O
+#define UART1_TXD       MovableFunction(0x11) // UART1 TXD Output
+#define UART1_RXD       MovableFunction(0x12) // UART1 RXD Input
+#define UART1_RTS       MovableFunction(0x13) // UART1 RTS Output
+#define UART1_CTS       MovableFunction(0x20) // UART1 CTS Input
+#define UART1_SCLK      MovableFunction(0x21) // UART1 SCLK I/O
+#define UART2_TXD       MovableFunction(0x22) // UART2 TXD Output
+#define UART2_RXD       MovableFunction(0x23) // UART2 RXD Input
+#define UART2_RTS       MovableFunction(0x30) // UART2 RTS Output
+#define UART2_CTS       MovableFunction(0x31) // UART2 CTS Input
+#define UART2_SCLK      MovableFunction(0x32) // UART2 SCLK I/O
 #define SPI0_SCK        MovableFunction(0x33) // SPI0 SCK I/O
 #define SPI0_MOSI       MovableFunction(0x40) // SPI0 MOSI I/O
 #define SPI0_MISO       MovableFunction(0x41) // SPI0 MISO I/O
