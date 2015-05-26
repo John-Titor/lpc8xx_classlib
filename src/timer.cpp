@@ -36,7 +36,9 @@ void MRT_IRQHandler()
 
     for (auto source = 0; source < 4; source++) {
         if (flags & (1 << source)) {
-            Timer::_callbacks[0]();
+            if (Timer::_callbacks[0] != nullptr) {
+                Timer::_callbacks[0]();
+            }
         }
     }
 }
