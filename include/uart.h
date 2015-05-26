@@ -48,6 +48,8 @@ public:
         _base->STAT = ~0;
         _base->CFG = CFG_DATALEN_8;
         _base->CFG |= CFG_ENABLE;
+
+        return *this;
     }
 
     void send(uint8_t c) const __always_inline
