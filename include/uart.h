@@ -28,14 +28,12 @@
 
 #include <LPC8xx.h>
 #include "_compiler.h"
-#include "sysctl.h"
 
 class UART
 {
 public:
-    constexpr UART(LPC_USART_TypeDef *base, const Sysctl &sysctl) :
-        _base(base),
-        _sysctl(sysctl)
+    constexpr UART(LPC_USART_TypeDef *base) :
+        _base(base)
     {}
 
     UART &configure(unsigned rate) __always_inline {
@@ -138,7 +136,6 @@ public:
 
 private:
     LPC_USART_TypeDef    *const _base;
-    const Sysctl        &_sysctl;
 
     enum Cfg_t {
         CFG_ENABLE      = (1U << 0),    // enable the UART
@@ -196,6 +193,6 @@ private:
     };
 };
 
-#define UART0   UART(LPC_USART0, SYSCTL_UART0)
-#define UART1   UART(LPC_USART1, SYSCTL_UART1)
-#define UART2   UART(LPC_USART2, SYSCTL_UART2)
+#define UART0   UART(LPC_USART0)
+#define UART1   UART(LPC_USART1)
+#define UART2   UART(LPC_USART2)
