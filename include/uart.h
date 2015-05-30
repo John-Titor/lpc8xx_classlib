@@ -38,21 +38,20 @@ public:
         _sysctl(sysctl)
     {}
 
-    UART &configure(unsigned rate) __always_inline
-    {
+    UART &configure(unsigned rate) __always_inline {
         _base->CFG = 0;                     // disable
         _base->CTRL = 0;                    // reset
         _base->INTENCLR =                   // disable all interrupts
-            INTEN_RXRDY         |
-            INTEN_TXRDY         |
-            INTEN_DELTACTS      |
-            INTEN_TXDIS         |
-            INTEN_OVERRUN       |
-            INTEN_DELTARXBRK    |
-            INTEN_START         |
-            INTEN_FRAMERR       |
-            INTEN_PARITYERR     |
-            INTEN_RXNOISE;
+        INTEN_RXRDY         |
+        INTEN_TXRDY         |
+        INTEN_DELTACTS      |
+        INTEN_TXDIS         |
+        INTEN_OVERRUN       |
+        INTEN_DELTARXBRK    |
+        INTEN_START         |
+        INTEN_FRAMERR       |
+        INTEN_PARITYERR     |
+        INTEN_RXNOISE;
         _base->BRG = (115200 / rate) - 1;   // assumes prescaler configured by Sysctl
         _base->CFG = CFG_DATALEN_8 | CFG_STOPLEN_2 | CFG_ENABLE;
 
@@ -72,6 +71,7 @@ public:
             c = _base->RXDATA;
             return true;
         }
+
         return false;
     }
 
@@ -97,43 +97,47 @@ public:
     }
 
 
-    const UART & operator << (uint8_t c) const __always_inline
+    const UART &operator << (uint8_t c) const __always_inline
     {
         send(c);
         return *this;
     }
 
-    const UART & operator << (char c) const __always_inline
+    const UART &operator << (char c) const __always_inline
     {
         send(c);
         return *this;
     }
 
-    const UART & operator << (const char *s) const __always_inline
+    const UART &operator << (const char *s) const __always_inline
     {
         while (*s != '\0') {
             send(*s++);
         }
+
         return *this;
     }
 
-    const UART & operator << (unsigned val) const
+    const UART &operator << (unsigned val) const
     {
         for (int shift = 28; shift >= 0; shift -= 4) {
             unsigned n = (val >> shift) & 0xf;
             uint8_t c;
+
             if (n < 10) {
                 c = '0' + n;
             } else {
                 c = 'A' + n - 10;
             }
+
             send(c);
         }
+
         return *this;
     }
 
 private:
-    LPC_USART_TypeDef   * const _base;
+    LPC_USART_TypeDef    *const _base;
     const Sysctl        &_sysctl;
 
     enum Cfg_t {

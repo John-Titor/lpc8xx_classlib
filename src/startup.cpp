@@ -88,11 +88,11 @@ _crt_start()
     }
 }
 
-// 
+//
 // Vectors
-// 
+//
 static void _start();
-extern "C" void _default_handler() { for(;;); }
+extern "C" void _default_handler() { for (;;); }
 extern "C" void NMI_Handler()          __attribute__((weak, alias("_default_handler")));
 extern "C" void HardFault_Handler()    __attribute__((weak, alias("_default_handler")));
 extern "C" void SVC_Handler()          __attribute__((weak, alias("_default_handler")));

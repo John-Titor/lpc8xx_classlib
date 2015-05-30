@@ -61,10 +61,10 @@ public:
 private:
     const unsigned  _pin_number;
     const unsigned  _pin_mask;
-    __IO uint32_t   * const _iocon_reg;
+    __IO uint32_t    *const _iocon_reg;
 
 public:
-    constexpr Pin(unsigned pin_number, __IO uint32_t *iocon_reg) : 
+    constexpr Pin(unsigned pin_number, __IO uint32_t *iocon_reg) :
         _pin_number(pin_number),
         _pin_mask(1U << pin_number),
         _iocon_reg(iocon_reg)
@@ -79,12 +79,12 @@ public:
 
     void set(bool value) const __always_inline
     {
-        (value ? LPC_GPIO_PORT->SET0 : LPC_GPIO_PORT->CLR0) = _pin_mask; 
+        (value ? LPC_GPIO_PORT->SET0 : LPC_GPIO_PORT->CLR0) = _pin_mask;
     }
 
-    Pin & configure(Direction_t direction, uint32_t modifier = 0) __always_inline
-    {
-        if (direction == Output) {
+    Pin &configure(Direction_t direction, uint32_t modifier = 0) __always_inline {
+        if (direction == Output)
+        {
             LPC_GPIO_PORT->DIR0 |= _pin_mask;
         } else {
             LPC_GPIO_PORT->DIR0 &= ~_pin_mask;
@@ -93,13 +93,13 @@ public:
         return *this;
     }
 
-    const Pin & operator << (int i) const __always_inline
+    const Pin &operator << (int i) const __always_inline
     {
         set(i);
         return * this;
     }
 
-    const Pin & operator=(const Pin &from) const __always_inline
+    const Pin &operator=(const Pin &from) const __always_inline
     {
         set(from.get());
         return *this;
@@ -146,7 +146,7 @@ public:
         __IO uint32_t *reg = &LPC_SWM->PINASSIGN0 + (_function_number >> 4);
         unsigned shift = (_function_number & 0xf) * 8;
 
-        *reg |= 0xff << shift;        
+        *reg |= 0xff << shift;
     }
 
 private:

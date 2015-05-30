@@ -26,7 +26,8 @@
 
 #include "sysctl.h"
 
-namespace {
+namespace
+{
 void
 common_init()
 {
@@ -71,6 +72,7 @@ Sysctl::init_24MHz()
         (1U << 0) |                             // ... M
         (2U << 5);                              // ... P
     LPC_SYSCON->PDRUNCFG &= ~SLPWAKE_SYSPLL_PD; // power up the PLL
+
     while (~LPC_SYSCON->SYSPLLSTAT & 1) {}      // ... wait for PLL lock
 
     LPC_SYSCON->SYSAHBCLKDIV = 1;               // run fabric at /1

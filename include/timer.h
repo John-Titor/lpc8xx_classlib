@@ -35,12 +35,12 @@ extern "C" void MRT_IRQHandler();
 class Timer
 {
 public:
-    typedef void        (* Callback)();
+    typedef void (* Callback)();
 
     constexpr Timer(unsigned index,
-            __IO uint32_t *intval,
-            __IO uint32_t *timer,
-            __IO uint32_t *ctrl) :
+                    __IO uint32_t *intval,
+                    __IO uint32_t *timer,
+                    __IO uint32_t *ctrl) :
         _index(index),
         _intval(intval),
         _timer(timer),
@@ -52,7 +52,7 @@ public:
         SYSCTL_MRT.clock(true);             // we want timers
         *_intval = 0x80000000;              // stop the timer
         *_ctrl = (repeat ? 0 : (1U << 1)) |             // one-shot or repeat
-            ((callback == nullptr) ? 0 : (1U << 0));    // with or without interrupt
+                 ((callback == nullptr) ? 0 : (1U << 0));    // with or without interrupt
         _callbacks[_index] = callback;      // save the callback
         *_intval = period | 0x80000000;     // immediate load of new value & start
     }
@@ -62,9 +62,9 @@ public:
         configure(nullptr, period, repeat);
     }
 
-    void                cancel() { configure (nullptr, 0, false); }
+    void                cancel() { configure(nullptr, 0, false); }
 
-    bool                expired() const 
+    bool                expired() const
     {
         uint32_t stat = LPC_MRT->IRQ_FLAG;
         uint32_t mask = (1U << _index);
@@ -73,14 +73,15 @@ public:
             LPC_MRT->IRQ_FLAG = mask;
             return true;
         }
+
         return false;
     }
 
 private:
     const unsigned      _index;
-    __IO uint32_t       * const _intval;
-    __IO uint32_t       * const _timer;
-    __IO uint32_t       * const _ctrl;
+    __IO uint32_t        *const _intval;
+    __IO uint32_t        *const _timer;
+    __IO uint32_t        *const _ctrl;
 
     static Callback     _callbacks[4];
 
