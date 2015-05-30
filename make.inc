@@ -123,7 +123,7 @@ $(filter %.cpp.o,$(_OBJS)): $(_OBJDIR)/%.o: % $(_EXTRA_DEPS)
 .PHONY: upload clean reformat
 
 upload: $(BIN)
-	$(PROGRAMMER) -bin -control -verify $< $(PORT) 115200 12000
+	$(PROGRAMMER) -bin -control -verify -term $< $(PORT) 115200 12000
 
 clean:
 	rm -rf $(_OBJDIR)
