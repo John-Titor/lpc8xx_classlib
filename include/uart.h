@@ -46,19 +46,48 @@ public:
         _base->CFG = 0;
         _base->CTRL = 0;
         _base->BRG = (115200 / rate) - 1;   // assumes prescaler configured by Sysctl
-        _base->STAT = ~0;
-        _base->CFG = CFG_DATALEN_8;
-        _base->CFG |= CFG_ENABLE;
+        _base->CFG = CFG_DATALEN_8 | CFG_ENABLE;
 
         return *this;
     }
 
     void send(uint8_t c) const __always_inline
     {
-        while ((_base->STAT & STAT_TXRDY) == 0) {}
+        while (!txidle()) {}
 
         _base->TXDATA = c;
     }
+
+    bool recv(unsigned &c) const __always_inline
+    {
+        if (rxready()) {
+            c = _base->RXDATA;
+            return true;
+        }
+        return false;
+    }
+
+    bool discard() const __always_inline
+    {
+        unsigned c;
+        return recv(c);
+    }
+
+    bool rxready() const __always_inline
+    {
+        return _base->STAT & STAT_RXRDY;
+    }
+
+    bool txready() const __always_inline
+    {
+        return _base->STAT & STAT_TXRDY;
+    }
+
+    bool txidle() const __always_inline
+    {
+        return _base->STAT & STAT_TXIDLE;
+    }
+
 
     const UART & operator << (uint8_t c) const __always_inline
     {
