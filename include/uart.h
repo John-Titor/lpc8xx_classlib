@@ -40,13 +40,21 @@ public:
 
     UART &configure(unsigned rate) __always_inline
     {
-        _sysctl.clock(true);
-        _sysctl.reset();
-
-        _base->CFG = 0;
-        _base->CTRL = 0;
+        _base->CFG = 0;                     // disable
+        _base->CTRL = 0;                    // reset
+        _base->INTENCLR =                   // disable all interrupts
+            INTEN_RXRDY         |
+            INTEN_TXRDY         |
+            INTEN_DELTACTS      |
+            INTEN_TXDIS         |
+            INTEN_OVERRUN       |
+            INTEN_DELTARXBRK    |
+            INTEN_START         |
+            INTEN_FRAMERR       |
+            INTEN_PARITYERR     |
+            INTEN_RXNOISE;
         _base->BRG = (115200 / rate) - 1;   // assumes prescaler configured by Sysctl
-        _base->CFG = CFG_DATALEN_8 | CFG_ENABLE;
+        _base->CFG = CFG_DATALEN_8 | CFG_STOPLEN_2 | CFG_ENABLE;
 
         return *this;
     }
@@ -168,6 +176,19 @@ private:
         STAT_FRM_ERRINT = (1U << 13),   // Framing Error interrupt flag
         STAT_PAR_ERRINT = (1U << 14),   // Parity Error interrupt flag
         STAT_RXNOISEINT = (1U << 15)    // Received Noise interrupt flag
+    };
+
+    enum Inten_t {
+        INTEN_RXRDY      = (1U << 0),   // Receive Ready interrupt
+        INTEN_TXRDY      = (1U << 2),   // Transmit Ready interrupt
+        INTEN_DELTACTS   = (1U << 5),   // Change in CTS state interrupt
+        INTEN_TXDIS      = (1U << 6),   // Transmitter disable interrupt
+        INTEN_OVERRUN    = (1U << 8),   // Overrun error interrupt
+        INTEN_DELTARXBRK = (1U << 11),  // Change in receiver break detection interrupt
+        INTEN_START      = (1U << 12),  // Start detect interrupt
+        INTEN_FRAMERR    = (1U << 13),  // Frame error interrupt
+        INTEN_PARITYERR  = (1U << 14),  // Parity error interrupt
+        INTEN_RXNOISE    = (1U << 15)   // Received noise interrupt
     };
 };
 
