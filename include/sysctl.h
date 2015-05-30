@@ -55,6 +55,8 @@ public:
         CLOCK_IOCON         = (1U << 18), // IOCON clock
         CLOCK_ACOMP         = (1U << 19), // Analog comparator clock
 
+        CLOCK_ALL           = ((1U << 20) - 1),
+
         CLOCK_NONE          = 0
     };
 
@@ -72,6 +74,8 @@ public:
         RESET_GPIO          = (1U << 10), // GPIO reset control
         RESET_FLASH         = (1U << 11), // FLASH reset control
         RESET_ACMP          = (1U << 12), // ACMP reset control
+
+        RESET_ALL           = ((1U << 13) - 1),
 
         RESET_NONE          = 0
     };
@@ -161,3 +165,5 @@ private:
 #define SYSCTL_WWDT     Sysctl(Sysctl::CLOCK_WWDT,      Sysctl::RESET_NONE)
 #define SYSCTL_IOCON    Sysctl(Sysctl::CLOCK_IOCON,     Sysctl::RESET_NONE)
 #define SYSCTL_ACOMP    Sysctl(Sysctl::CLOCK_ACOMP,     Sysctl::RESET_ACMP)
+
+#define SYSCTL_ALL      Sysctl(Sysctl::CLOCK_ALL,     Sysctl::RESET_ALL)
