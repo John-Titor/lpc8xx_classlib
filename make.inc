@@ -9,6 +9,7 @@
 # Set INCLUDES to a list of include paths.
 # Set DEFINES to a list of symbols to define.
 # Set LIBS with BIN to link additional libraries.
+# Set EXTRA_FMT_SRCS to reformat other source files (e.g. headers)
 #
 
 # Sanity-check variables
@@ -31,6 +32,7 @@ _DEPS		 = $(_OBJS:.o=.d)
 CC		 = arm-none-eabi-gcc
 AR		 = arm-none-eabi-ar
 OBJCOPY		 = arm-none-eabi-objcopy
+SIZE		 = arm-none-eabi-size
 PROGRAMMER	 = /Users/msmith/work/github/lpc21isp/lpc21isp
 ASTYLE		 = astyle
 
@@ -89,6 +91,7 @@ $(BIN): $(_ELF) $(_EXTRA_DEPS)
 $(_ELF): $(_OBJS) $(_EXTRA_DEPS) $(_LDSCRIPT)
 	@echo $@
 	@$(CC) -o $@ $(_OBJS) $(_LDFLAGS) -T$(_LDSCRIPT)
+	@$(SIZE) $@
 endif
 
 #
@@ -144,6 +147,7 @@ reformat:
 	--keep-one-line-blocks \
 	--formatted \
 	--suffix=none \
-	src/*.cpp include/*.h
+	$(wildcard $(SRCS)) \
+	$(wildcard $(EXTRA_FMT_SRCS))
 
 -include $(_DEPS)
