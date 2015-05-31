@@ -6,6 +6,7 @@ extern "C" void main();
 #include <uart.h>
 #include <timer.h>
 #include <interrupt.h>
+#include <sct.h>
 
 void
 callback(void)
