@@ -132,18 +132,20 @@ public:
         LPC_SCT->CTRL_H &= ~(CTRL_HALT);            // start counters
     }
 
-    static void set_fout_period(unsigned output, unsigned period) __always_inline
-    {
-        if (period < 4) {
+    static void set_fout_period(unsigned output, unsigned period) __always_inline {
+        if (period < 4)
+        {
             period = 4;
-        } else if (period > 0x1ffff) {
+        } else if (period > 0x1ffff)
+        {
             period = 0x1ffff;
         }
 
         period /= 2;
         period -= 1;
 
-        if (output == 0) {
+        if (output == 0)
+        {
             LPC_SCT->MATCHREL[0].L = period;
         } else {
             LPC_SCT->MATCHREL[0].H = period;
