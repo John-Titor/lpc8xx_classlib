@@ -135,18 +135,16 @@ public:
 
     void claim_pin(const Pin &pin) const __always_inline
     {
-        __IO uint32_t *reg = &LPC_SWM->PINASSIGN0 + (_function_number >> 4);
-        unsigned shift = (_function_number & 0xf) * 8;
+        __IO uint32_t *reg = &(LPC_SWM->PINASSIGN[_function_number >> 4]);
+        uint32_t shift = (_function_number & 0xf) * 8;
+        uint32_t mask = 0xff << shift;
 
-        *reg = (*reg & ~(0xff << shift)) | (pin.number() << shift);
+        *reg = (*reg & ~mask) | (pin.number() << shift);
     }
 
     void release_pin() const __always_inline
     {
-        __IO uint32_t *reg = &LPC_SWM->PINASSIGN0 + (_function_number >> 4);
-        unsigned shift = (_function_number & 0xf) * 8;
-
-        *reg |= 0xff << shift;
+        claim_pin(Pin(0xff, 0));
     }
 
 private:
