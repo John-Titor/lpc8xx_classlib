@@ -99,6 +99,12 @@ public:
         return * this;
     }
 
+    const Pin &operator << (bool s) const __always_inline
+    {
+        set(s);
+        return * this;
+    }
+
     const Pin &operator=(const Pin &from) const __always_inline
     {
         set(from.get());
