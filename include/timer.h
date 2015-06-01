@@ -80,6 +80,7 @@ public:
     void                delay(unsigned period) const __always_inline
     {
         configure(period);
+
         while (!expired()) {
         }
     }
