@@ -77,6 +77,13 @@ public:
         return false;
     }
 
+    void                delay(unsigned period) const __always_inline
+    {
+        configure(period);
+        while (!expired()) {
+        }
+    }
+
 private:
     const unsigned      _index;
     __IO uint32_t        *const _intval;
